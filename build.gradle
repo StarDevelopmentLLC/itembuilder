@@ -1,0 +1,56 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'com.gradleup.shadow' version '9.0.0-beta2'
+}
+
+group 'com.github.StarDevelopmentLLC'
+version '0.1.0'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url = 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+
+publishing {
+    publications {
+        shadow(MavenPublication) { publication ->
+            project.shadow.component(publication)
+        }
+    }
+}
+shadowJar {
+    archiveClassifier.set('')
+    //destinationDirectory = file(System.getProperty("user.home") + File.separator + "Documents" + File.separator + "JarOutput")
+}
+
+dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
+    api project(':base')
+    api project(':v1_13')
+    api project(':v1_13_R2')
+    api project(':v1_14')
+    api project(':v1_14_4')
+    api project(':v1_16')
+    api project(':v1_17')
+    api project(':v1_19_3')
+    api project(':v1_20')
+    api project(':v1_21')
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+tasks.compileJava.dependsOn(clean)
+tasks.jar.finalizedBy(shadowJar)
+tasks.publishToMavenLocal.dependsOn(shadowJar)
+tasks.build.finalizedBy(publishToMavenLocal)
