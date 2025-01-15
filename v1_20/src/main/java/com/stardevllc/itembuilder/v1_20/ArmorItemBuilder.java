@@ -1,6 +1,5 @@
 package com.stardevllc.itembuilder.v1_20;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
 import com.stardevllc.itembuilder.enums.ArmorMaterial;
@@ -8,6 +7,7 @@ import com.stardevllc.itembuilder.enums.ArmorSlot;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -31,7 +31,7 @@ public class ArmorItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
     
-    protected static ArmorItemBuilder createFromConfig(Section section) {
+    protected static ArmorItemBuilder createFromConfig(ConfigurationSection section) {
         ArmorItemBuilder builder = new ArmorItemBuilder();
         TrimMaterial tm = Bukkit.getRegistry(TrimMaterial.class).get(NamespacedKey.fromString(section.getString("trim.material")));
         TrimPattern tp = Bukkit.getRegistry(TrimPattern.class).get(NamespacedKey.fromString(section.getString("trim.pattern")));
@@ -53,7 +53,7 @@ public class ArmorItemBuilder extends ItemBuilder {
     protected ArmorItemBuilder() {}
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("trim.material", trim.getMaterial().getKey().toString());
         section.set("trim.pattern", trim.getPattern().getKey().toString());

@@ -1,8 +1,8 @@
 package com.stardevllc.itembuilder.v1_21;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.WritableBookMeta;
 
@@ -31,7 +31,7 @@ public class WritableBookBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static WritableBookBuilder createFromConfig(Section section) {
+    protected static WritableBookBuilder createFromConfig(ConfigurationSection section) {
         WritableBookBuilder builder = new WritableBookBuilder();
         builder.pages(section.getStringList("pages"));
         return builder;
@@ -56,7 +56,7 @@ public class WritableBookBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("pages", this.pages);
     }

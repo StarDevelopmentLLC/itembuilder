@@ -1,9 +1,9 @@
 package com.stardevllc.itembuilder.material;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
 import org.bukkit.FireworkEffect;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 
@@ -35,12 +35,12 @@ public class FireworkItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static FireworkItemBuilder createFromConfig(Section section) {
+    protected static FireworkItemBuilder createFromConfig(ConfigurationSection section) {
         FireworkItemBuilder builder = new FireworkItemBuilder();
         builder.power(section.getInt("power"));
-        Section effectsSection = section.getSection("effects");
+        ConfigurationSection effectsSection = section.getConfigurationSection("effects");
         if (effectsSection != null) {
-            for (Object key : effectsSection.getKeys()) {
+            for (Object key : effectsSection.getKeys(false)) {
                 FireworkEffect object = (FireworkEffect) effectsSection.get(key.toString(), FireworkEffect.class);
                 builder.addEffect(object);
             }
@@ -49,7 +49,7 @@ public class FireworkItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("power", this.power);
         for (int i = 0; i < effects.size(); i++) {

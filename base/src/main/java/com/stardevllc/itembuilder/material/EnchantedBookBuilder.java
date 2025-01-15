@@ -1,8 +1,8 @@
 package com.stardevllc.itembuilder.material;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -35,11 +35,11 @@ public class EnchantedBookBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static EnchantedBookBuilder createFromConfig(Section section) {
+    protected static EnchantedBookBuilder createFromConfig(ConfigurationSection section) {
         EnchantedBookBuilder builder = new EnchantedBookBuilder();
-        Section storedEnchantsSection = section.getSection("storedenchantments");
+        ConfigurationSection storedEnchantsSection = section.getConfigurationSection("storedenchantments");
         if (storedEnchantsSection != null) {
-            for (Object enchantName : storedEnchantsSection.getKeys()) {
+            for (Object enchantName : storedEnchantsSection.getKeys(false)) {
                 Enchantment enchantment = ENCHANT_WRAPPER.getEnchantmentByKey(enchantName.toString());
                 int level = storedEnchantsSection.getInt(enchantName.toString());
                 builder.addStoredEnchant(enchantment, level);
@@ -49,7 +49,7 @@ public class EnchantedBookBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         storedEnchants.forEach((enchant, level) -> section.set("storedenchantments." + ENCHANT_WRAPPER.getEnchantmentKey(enchant), level));
     }

@@ -1,7 +1,5 @@
 package com.stardevllc.itembuilder;
 
-import com.stardevllc.colors.StarColors;
-import com.stardevllc.config.Section;
 import com.stardevllc.mcwrappers.base.AttributeModifierWrapper;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
@@ -20,9 +18,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import static com.stardevllc.mcwrappers.MCWrappers.*;
+import static com.stardevllc.mcwrappers.MCWrappers.ENCHANT_WRAPPER;
+import static com.stardevllc.mcwrappers.MCWrappers.ITEM_WRAPPER;
 
 public class ItemBuilder implements Cloneable {
 
@@ -42,7 +40,7 @@ public class ItemBuilder implements Cloneable {
     protected Map<String, Object> customNBT = new HashMap<>();
 
     @SuppressWarnings("SuspiciousMethodCalls")
-    public static ItemBuilder fromConfig(Section section) {
+    public static ItemBuilder fromConfig(ConfigurationSection section) {
         XMaterial material = XMaterial.valueOf(section.getString("material"));
         ItemMeta itemMeta = Bukkit.getItemFactory().getItemMeta(material.parseMaterial());
         ItemBuilder itemBuilder;
@@ -65,7 +63,7 @@ public class ItemBuilder implements Cloneable {
             }
         }
 
-        Section enchantsSection = section.getConfigurationSection("enchantments");
+        ConfigurationSection enchantsSection = section.getConfigurationSection("enchantments");
         if (enchantsSection != null) {
             for (Object enchantName : enchantsSection.getKeys(false)) {
                 Enchantment enchantment = ENCHANT_WRAPPER.getEnchantmentByKey(enchantName.toString().replace("_", ":"));
@@ -74,7 +72,7 @@ public class ItemBuilder implements Cloneable {
             }
         }
 
-        Section attributesSection = section.getConfigurationSection("attributes");
+        ConfigurationSection attributesSection = section.getConfigurationSection("attributes");
         if (attributesSection != null) {
             for (Object key : attributesSection.getKeys(false)) {
                 String attribute = key.toString().toUpperCase();
@@ -93,7 +91,7 @@ public class ItemBuilder implements Cloneable {
         return itemBuilder;
     }
 
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         section.set("material", material.name());
         section.set("amount", amount);
         section.set("displayname", displayName);
@@ -131,7 +129,7 @@ public class ItemBuilder implements Cloneable {
         itemBuilder.displayName(itemMeta.getDisplayName()).amount(itemStack.getAmount())
                 .addItemFlags(itemMeta.getItemFlags().toArray(new ItemFlag[0]))
                 .setLore(itemMeta.getLore()).setEnchants(itemMeta.getEnchants());
-        
+
         NBT.get(itemStack, nbt -> {
             itemBuilder.unbreakable(nbt.getBoolean("Unbreakable")).damage(nbt.getInteger("Damage"));
         });
@@ -270,13 +268,10 @@ public class ItemBuilder implements Cloneable {
         }
 
         if (this.displayName != null) {
-            itemMeta.setDisplayName(StarColors.color(this.displayName));
+            itemMeta.setDisplayName(this.displayName);
         }
 
-        if (!this.lore.isEmpty()) {
-            List<String> coloredLore = this.lore.stream().map(StarColors::color).collect(Collectors.toCollection(LinkedList::new));
-            itemMeta.setLore(coloredLore);
-        }
+        itemMeta.setLore(this.lore);
 
         if (itemMeta instanceof Repairable repairable) {
             repairable.setRepairCost(this.repairCost);
@@ -297,7 +292,7 @@ public class ItemBuilder implements Cloneable {
         itemStack.setAmount(amount);
         ItemMeta itemMeta = createItemMeta();
         itemStack.setItemMeta(itemMeta);
-        
+
         NBT.modify(itemStack, nbtItem -> {
             if (!this.customNBT.isEmpty()) {
                 ReadWriteNBT customCompound = nbtItem.getOrCreateCompound("custom");

@@ -1,8 +1,8 @@
 package com.stardevllc.itembuilder.material;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +27,7 @@ public class SkullItemBuilder extends ItemBuilder {
         return builder;
     }
 
-    protected static SkullItemBuilder createFromConfig(Section section) {
+    protected static SkullItemBuilder createFromConfig(ConfigurationSection section) {
         SkullItemBuilder builder = new SkullItemBuilder();
         if (section.contains("owner")) {
             builder.owner(section.getString("owner"));
@@ -37,7 +37,7 @@ public class SkullItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         if (owner != null) {
             section.set("owner", owner);

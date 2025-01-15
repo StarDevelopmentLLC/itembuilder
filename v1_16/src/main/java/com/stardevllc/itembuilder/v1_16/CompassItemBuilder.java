@@ -1,11 +1,11 @@
 package com.stardevllc.itembuilder.v1_16;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CompassMeta;
 
@@ -39,7 +39,7 @@ public class CompassItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static CompassItemBuilder createFromConfig(Section section) {
+    protected static CompassItemBuilder createFromConfig(ConfigurationSection section) {
         CompassItemBuilder builder = new CompassItemBuilder();
         builder.tracked(section.getBoolean("tracked"));
         if (section.contains("lodestone")) {
@@ -53,7 +53,7 @@ public class CompassItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("tracked", this.tracked);
         if (this.lodestone != null) {

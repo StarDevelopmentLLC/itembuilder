@@ -1,8 +1,8 @@
 package com.stardevllc.itembuilder.v1_21;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.OminousBottleMeta;
 
@@ -28,7 +28,7 @@ public class OminousBottleBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static OminousBottleBuilder createFromConfig(Section section) {
+    protected static OminousBottleBuilder createFromConfig(ConfigurationSection section) {
         OminousBottleBuilder builder = new OminousBottleBuilder();
         builder.amplifier(section.getInt("amplifier"));
         return builder;
@@ -40,7 +40,7 @@ public class OminousBottleBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("amplifier", this.amplifier);
     }

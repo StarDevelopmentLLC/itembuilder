@@ -1,13 +1,12 @@
 package com.stardevllc.itembuilder.v1_16;
 
-import com.stardevllc.colors.StarColors;
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
 import com.stardevllc.itembuilder.enums.BookType;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.chat.ComponentSerializer;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -45,14 +44,14 @@ public class BookItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static BookItemBuilder createFromConfig(Section section) {
+    protected static BookItemBuilder createFromConfig(ConfigurationSection section) {
         BookItemBuilder builder = new BookItemBuilder();
         builder.title(section.getString("title"));
         builder.author(section.getString("author"));
         builder.generation(BookMeta.Generation.valueOf(section.getString("generation")));
-        Section pagesSection = section.getSection("pages");
+        ConfigurationSection pagesSection = section.getConfigurationSection("pages");
         if (pagesSection != null) {
-            for (Object key : pagesSection.getKeys()) {
+            for (Object key : pagesSection.getKeys(false)) {
                 builder.addPage(ComponentSerializer.parse(pagesSection.getString(key.toString())));
             }
         }
@@ -60,7 +59,7 @@ public class BookItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("author", this.author);
         section.set("title", this.title);
@@ -71,13 +70,13 @@ public class BookItemBuilder extends ItemBuilder {
     }
     
     public BookItemBuilder addPage(String page) {
-        this.pages.add(TextComponent.fromLegacyText(StarColors.color(page)));
+        this.pages.add(TextComponent.fromLegacyText(page));
         return this;
     }
     
     public BookItemBuilder setPages(List<String> pages) {
         this.pages.clear();
-        pages.forEach(page -> this.pages.add(TextComponent.fromLegacyText(StarColors.color(page))));
+        pages.forEach(page -> this.pages.add(TextComponent.fromLegacyText(page)));
         return this;
     }
     
@@ -110,8 +109,8 @@ public class BookItemBuilder extends ItemBuilder {
     @Override
     protected BookMeta createItemMeta() {
         BookMeta itemMeta = (BookMeta) super.createItemMeta();
-        itemMeta.setTitle(StarColors.color(this.title));
-        itemMeta.setAuthor(StarColors.color(this.author));
+        itemMeta.setTitle(title);
+        itemMeta.setAuthor(author);
         itemMeta.setGeneration(generation);
         itemMeta.spigot().setPages(this.pages);
         return itemMeta;

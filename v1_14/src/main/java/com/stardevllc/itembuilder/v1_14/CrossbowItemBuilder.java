@@ -1,8 +1,8 @@
 package com.stardevllc.itembuilder.v1_14;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
 
@@ -32,19 +32,19 @@ public class CrossbowItemBuilder extends ItemBuilder {
         return itemBuilder;
     }
 
-    protected static CrossbowItemBuilder createFromConfig(Section section) {
+    protected static CrossbowItemBuilder createFromConfig(ConfigurationSection section) {
         CrossbowItemBuilder builder = new CrossbowItemBuilder();
-        Section projectilesSection = section.getSection("projectiles");
+        ConfigurationSection projectilesSection = section.getConfigurationSection("projectiles");
         if (projectilesSection != null) {
-            for (Object key : projectilesSection.getKeys()) {
-//                TODO builder.addProjectile(projectilesSection.getAs(key.toString(), ItemStack.class));
+            for (String key : projectilesSection.getKeys(false)) {
+                builder.addProjectile(projectilesSection.getSerializable(key, ItemStack.class));
             }
         }
         return builder;
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         for (int i = 0; i < projectiles.size(); i++) {
             section.set("projectiles." + i, projectiles.get(i));   

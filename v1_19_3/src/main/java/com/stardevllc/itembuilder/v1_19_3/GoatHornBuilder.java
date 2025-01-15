@@ -1,11 +1,11 @@
 package com.stardevllc.itembuilder.v1_19_3;
 
-import com.stardevllc.config.Section;
 import com.stardevllc.itembuilder.ItemBuilder;
 import com.stardevllc.itembuilder.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.MusicInstrument;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MusicInstrumentMeta;
 
@@ -32,14 +32,14 @@ public class GoatHornBuilder extends ItemBuilder {
         return builder;
     }
 
-    protected static GoatHornBuilder createFromConfig(Section section) {
+    protected static GoatHornBuilder createFromConfig(ConfigurationSection section) {
         GoatHornBuilder builder = new GoatHornBuilder();
         builder.instrument(Bukkit.getRegistry(MusicInstrument.class).get(NamespacedKey.fromString(section.getString("instrument"))));
         return builder;
     }
 
     @Override
-    public void saveToConfig(Section section) {
+    public void saveToConfig(ConfigurationSection section) {
         super.saveToConfig(section);
         section.set("instrument", this.instrument.getKey());
     }
