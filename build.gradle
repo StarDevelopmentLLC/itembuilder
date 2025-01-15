@@ -16,6 +16,9 @@ repositories {
     maven {
         url = 'https://oss.sonatype.org/content/repositories/snapshots'
     }
+    maven {
+        url = 'https://www.jitpack.io'
+    }
 }
 
 publishing {
@@ -32,6 +35,7 @@ shadowJar {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.8-R0.1-SNAPSHOT'
+    api 'com.github.StarDevelopmentLLC:mcwrappers:0.1.0'
     api project(':base')
     api project(':v1_13')
     api project(':v1_13_R2')
