@@ -1,5 +1,6 @@
 package com.stardevllc.itembuilder;
 
+import com.stardevllc.colors.StarColors;
 import com.stardevllc.mcwrappers.base.AttributeModifierWrapper;
 import de.tr7zw.nbtapi.NBT;
 import de.tr7zw.nbtapi.iface.ReadWriteNBT;
@@ -268,10 +269,12 @@ public class ItemBuilder implements Cloneable {
         }
 
         if (this.displayName != null) {
-            itemMeta.setDisplayName(this.displayName);
+            itemMeta.setDisplayName(StarColors.color(this.displayName));
         }
-
-        itemMeta.setLore(this.lore);
+        
+        List<String> coloredLore = new LinkedList<>();
+        this.lore.forEach(line -> coloredLore.add(StarColors.color(line)));
+        itemMeta.setLore(coloredLore);
 
         if (itemMeta instanceof Repairable repairable) {
             repairable.setRepairCost(this.repairCost);
